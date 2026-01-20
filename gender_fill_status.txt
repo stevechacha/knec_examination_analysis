@@ -1,0 +1,5 @@
+Gender sections filled successfully!
+Boys: 96
+Girls: 76
+Row 13 C13: 96
+Row 14 D14: 76
