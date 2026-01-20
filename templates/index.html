@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KCSE Results Extraction System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-graduation-cap"></i> KCSE Results Extraction System</h1>
+            <p class="subtitle">Extract KCSE results from screenshots and populate Excel templates</p>
+        </header>
+
+        <main>
+            <div class="upload-section">
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="template">
+                            <i class="fas fa-file-excel"></i> Excel Template
+                        </label>
+                        <input type="file" id="template" name="template" accept=".xlsx,.xls" required>
+                        <small>Upload the student upload template Excel file</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="screenshots">
+                            <i class="fas fa-images"></i> Screenshot Images
+                        </label>
+                        <input type="file" id="screenshots" name="screenshots" accept=".png,.jpg,.jpeg" multiple required>
+                        <small>Select one or more KCSE result screenshot images</small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <i class="fas fa-upload"></i> Process Screenshots
+                    </button>
+                </form>
+            </div>
+
+            <div id="progressSection" class="progress-section" style="display: none;">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p id="progressText">Processing...</p>
+            </div>
+
+            <div id="resultSection" class="result-section" style="display: none;">
+                <div class="result-card success" id="resultCard">
+                    <h3><i class="fas fa-check-circle"></i> Processing Complete!</h3>
+                    <div id="resultContent"></div>
+                    <a id="downloadBtn" href="#" class="btn btn-success" style="display: none;">
+                        <i class="fas fa-download"></i> Download Results
+                    </a>
+                </div>
+            </div>
+
+            <div id="errorSection" class="result-section" style="display: none;">
+                <div class="result-card error" id="errorCard">
+                    <h3><i class="fas fa-exclamation-circle"></i> Error</h3>
+                    <div id="errorContent"></div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>KCSE Enterprise System v1.0.0 | Built for efficient results processing</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
