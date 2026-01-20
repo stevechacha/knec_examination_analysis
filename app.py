@@ -130,7 +130,9 @@ def upload_files():
             'failed': failed_count,
             'errors': errors[:10],  # Limit errors shown
             'output_file': output_filename,
-            'download_url': url_for('download_file', filename=output_filename)
+            'download_url': url_for('download_file', filename=output_filename),
+            'file_path': str(output_path),
+            'file_size': output_path.stat().st_size if output_path.exists() else 0
         })
         
     except Exception as e:
@@ -144,8 +146,7 @@ def download_file(filename):
     try:
         file_path = app.config['OUTPUT_FOLDER'] / secure_filename(filename)
         if not file_path.exists():
-            flash('File not found', 'error')
-            return redirect(url_for('index'))
+            return jsonify({'error': 'File not found'}), 404
         
         return send_file(
             str(file_path),
@@ -155,8 +156,7 @@ def download_file(filename):
         )
     except Exception as e:
         logger.error(f"Error downloading file: {e}", exc_info=True)
-        flash('Error downloading file', 'error')
-        return redirect(url_for('index'))
+        return jsonify({'error': f'Error downloading file: {str(e)}'}), 500
 
 
 @app.route('/api/health')

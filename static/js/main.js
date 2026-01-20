@@ -177,20 +177,41 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function showSuccess(data) {
-        let html = `<p style="font-size: 1.2em; font-weight: 600; margin-bottom: 15px;">
-            <i class="fas fa-check-circle"></i> Successfully processed ${data.processed} screenshot(s)
-        </p>`;
+        const fileSize = data.file_size ? `(${(data.file_size / 1024).toFixed(1)} KB)` : '';
+        
+        let html = `
+            <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                <p style="font-size: 1.3em; font-weight: 700; margin-bottom: 10px; color: #065f46;">
+                    <i class="fas fa-check-circle"></i> Processing Complete!
+                </p>
+                <p style="font-size: 1.1em; font-weight: 600; margin-bottom: 15px;">
+                    Successfully processed <span style="color: #059669; font-size: 1.2em;">${data.processed}</span> screenshot(s)
+                </p>
+                ${data.output_file ? `
+                    <div style="background: white; padding: 15px; border-radius: 8px; margin-top: 15px; border: 2px solid #10b981;">
+                        <p style="margin: 0; font-weight: 600; color: #065f46;">
+                            <i class="fas fa-file-excel"></i> Output File: <span style="color: #059669;">${data.output_file}</span> ${fileSize}
+                        </p>
+                        <p style="margin: 8px 0 0 0; font-size: 0.9em; color: #6b7280;">
+                            Click the download button below to save the Excel file with filled grades
+                        </p>
+                    </div>
+                ` : ''}
+            </div>
+        `;
         
         if (data.failed > 0) {
-            html += `<p class="warning" style="margin: 15px 0;">
-                <i class="fas fa-exclamation-triangle"></i> ${data.failed} screenshot(s) failed to process
-            </p>`;
+            html += `<div style="background: rgba(245, 158, 11, 0.1); padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #f59e0b;">
+                <p class="warning" style="margin: 0; color: #92400e;">
+                    <i class="fas fa-exclamation-triangle"></i> ${data.failed} screenshot(s) failed to process
+                </p>
+            </div>`;
         }
         
         if (data.errors && data.errors.length > 0) {
-            html += '<div style="margin-top: 20px;"><strong>Details:</strong><ul>';
+            html += '<div style="margin-top: 20px;"><strong style="color: #6b7280;">Processing Details:</strong><ul style="margin-top: 10px;">';
             data.errors.forEach(error => {
-                html += `<li>${error}</li>`;
+                html += `<li style="margin: 5px 0; color: #6b7280;">${error}</li>`;
             });
             html += '</ul></div>';
         }
@@ -200,6 +221,23 @@ document.addEventListener('DOMContentLoaded', function() {
         if (data.download_url) {
             downloadBtn.href = data.download_url;
             downloadBtn.style.display = 'inline-flex';
+            document.getElementById('downloadHint').style.display = 'block';
+            
+            // Auto-trigger download after a short delay
+            setTimeout(() => {
+                // Create a temporary link and trigger download
+                const link = document.createElement('a');
+                link.href = data.download_url;
+                link.download = data.output_file || 'kcse_results.xlsx';
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                
+                // Clean up after a delay
+                setTimeout(() => {
+                    document.body.removeChild(link);
+                }, 100);
+            }, 800);
         }
         
         resultSection.style.display = 'block';

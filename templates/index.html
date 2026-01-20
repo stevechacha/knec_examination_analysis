@@ -80,6 +80,9 @@
                         <small><i class="fas fa-info-circle"></i> Select one or more KCSE result screenshot images</small>
                     </div>
 
+                    <div class="process-info">
+                        <p><i class="fas fa-info-circle"></i> After processing, the Excel file with filled grades will be automatically downloaded to your Downloads folder</p>
+                    </div>
                     <button type="submit" class="btn btn-primary" id="submitBtn">
                         <span class="btn-content">
                             <i class="fas fa-magic"></i>
@@ -119,10 +122,13 @@
                     </div>
                     <h3>Processing Complete!</h3>
                     <div id="resultContent" class="result-content"></div>
-                    <a id="downloadBtn" href="#" class="btn btn-success" style="display: none;">
+                    <a id="downloadBtn" href="#" class="btn btn-success" style="display: none;" download>
                         <i class="fas fa-download"></i>
-                        <span>Download Results</span>
+                        <span>Download Excel File with Filled Grades</span>
                     </a>
+                    <p id="downloadHint" style="display: none; margin-top: 15px; color: #6b7280; font-size: 0.9em;">
+                        <i class="fas fa-info-circle"></i> The file will be saved to your Downloads folder
+                    </p>
                 </div>
             </div>
 

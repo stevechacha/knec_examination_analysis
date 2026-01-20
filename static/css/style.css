@@ -418,6 +418,29 @@ main {
     font-size: 0.9em;
 }
 
+.process-info {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(102, 126, 234, 0.1) 100%);
+    border-left: 4px solid var(--info-color);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    animation: slideIn 0.3s ease;
+}
+
+.process-info p {
+    margin: 0;
+    color: var(--text-dark);
+    font-size: 0.95em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.process-info i {
+    color: var(--info-color);
+    font-size: 1.2em;
+}
+
 .form-group small i {
     color: var(--info-color);
 }
