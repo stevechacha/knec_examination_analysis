@@ -189,13 +189,13 @@ def main():
         epilog="""
 Examples:
   # Process screenshots in current directory
-  python kcse_enterprise_system.py --screenshots . --template template.xlsx
+  python kcse_enterprise_system.py --screenshots . --template templates/template.xlsx
   
   # Specify output file
-  python kcse_enterprise_system.py --screenshots ./screenshots --template template.xlsx --output results.xlsx
+  python kcse_enterprise_system.py --screenshots ./screenshots --template templates/template.xlsx --output results.xlsx
   
   # Use custom config
-  python kcse_enterprise_system.py --screenshots . --template template.xlsx --config config.json
+  python kcse_enterprise_system.py --screenshots . --template templates/template.xlsx --config config.json
         """
     )
     

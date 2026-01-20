@@ -16,6 +16,14 @@
 *_no_duplicates.xlsx
 *_complete*.xlsx
 
+# Data files / exports (keep out of repo)
+Upload Student Profiles*.xlsx
+Students Upload KCSE Results - Template_updated.xlsx
+
+# By default, ignore all Excel files, but allow curated templates
+*.xlsx
+!templates/*.xlsx
+
 # Python cache
 __pycache__/
 *.py[cod]
