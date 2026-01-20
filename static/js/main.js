@@ -178,6 +178,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function showSuccess(data) {
         const fileSize = data.file_size ? `(${(data.file_size / 1024).toFixed(1)} KB)` : '';
+        const outputDir = data.output_directory || 'outputs folder';
         
         let html = `
             <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
@@ -189,11 +190,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 </p>
                 ${data.output_file ? `
                     <div style="background: white; padding: 15px; border-radius: 8px; margin-top: 15px; border: 2px solid #10b981;">
-                        <p style="margin: 0; font-weight: 600; color: #065f46;">
+                        <p style="margin: 0 0 10px 0; font-weight: 600; color: #065f46;">
                             <i class="fas fa-file-excel"></i> Output File: <span style="color: #059669;">${data.output_file}</span> ${fileSize}
                         </p>
+                        <p style="margin: 8px 0; font-size: 0.9em; color: #6b7280;">
+                            <i class="fas fa-folder-open"></i> Server Location: <code style="background: #f3f4f6; padding: 2px 6px; border-radius: 4px; font-size: 0.85em;">${outputDir}</code>
+                        </p>
                         <p style="margin: 8px 0 0 0; font-size: 0.9em; color: #6b7280;">
-                            Click the download button below to save the Excel file with filled grades
+                            <i class="fas fa-download"></i> The file will be downloaded to your <strong>Downloads folder</strong> automatically
                         </p>
                     </div>
                 ` : ''}

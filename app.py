@@ -25,8 +25,10 @@ app.config['MAX_CONTENT_LENGTH'] = 500 * 1024 * 1024  # 500MB max file size
 # Use project directory for templates
 PROJECT_ROOT = Path(__file__).parent
 app.config['TEMPLATE_FOLDER'] = PROJECT_ROOT / 'excel_templates'
-app.config['UPLOAD_FOLDER'] = Path(tempfile.gettempdir()) / 'kcse_uploads'
-app.config['OUTPUT_FOLDER'] = Path(tempfile.gettempdir()) / 'kcse_outputs'
+# Use project directory for outputs (more accessible)
+PROJECT_ROOT = Path(__file__).parent
+app.config['UPLOAD_FOLDER'] = PROJECT_ROOT / 'uploads'
+app.config['OUTPUT_FOLDER'] = PROJECT_ROOT / 'outputs'
 
 # Create upload/output directories
 app.config['UPLOAD_FOLDER'].mkdir(parents=True, exist_ok=True)
@@ -123,6 +125,8 @@ def upload_files():
         
         excel_processor.update_template(template_path, extracted_data, output_path)
         
+        file_size = output_path.stat().st_size if output_path.exists() else 0
+        
         return jsonify({
             'success': True,
             'message': f'Successfully processed {processed_count} screenshots',
@@ -132,7 +136,8 @@ def upload_files():
             'output_file': output_filename,
             'download_url': url_for('download_file', filename=output_filename),
             'file_path': str(output_path),
-            'file_size': output_path.stat().st_size if output_path.exists() else 0
+            'file_size': file_size,
+            'output_directory': str(app.config['OUTPUT_FOLDER'])
         })
         
     except Exception as e:
