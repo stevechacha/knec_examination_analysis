@@ -5,67 +5,144 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KCSE Results Extraction System</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="background-animation">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+    </div>
+
     <div class="container">
         <header>
-            <h1><i class="fas fa-graduation-cap"></i> KCSE Results Extraction System</h1>
-            <p class="subtitle">Extract KCSE results from screenshots and populate Excel templates</p>
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h1>KCSE Results Extraction System</h1>
+                <p class="subtitle">Transform screenshots into structured Excel data with AI-powered OCR</p>
+            </div>
         </header>
 
         <main>
             <div class="upload-section">
                 <form id="uploadForm" enctype="multipart/form-data">
+                    <!-- Excel Template Upload -->
                     <div class="form-group">
-                        <label for="template">
-                            <i class="fas fa-file-excel"></i> Excel Template
+                        <label for="template" class="form-label">
+                            <i class="fas fa-file-excel"></i>
+                            <span>Excel Template</span>
                         </label>
-                        <input type="file" id="template" name="template" accept=".xlsx,.xls" required>
-                        <small>Upload the student upload template Excel file</small>
+                        <div class="file-upload-wrapper">
+                            <input type="file" id="template" name="template" accept=".xlsx,.xls" required>
+                            <div class="file-upload-area" data-target="template">
+                                <div class="file-upload-content">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p class="file-upload-text">Click to upload or drag and drop</p>
+                                    <p class="file-upload-hint">Excel file (.xlsx, .xls)</p>
+                                </div>
+                                <div class="file-selected" id="templateSelected" style="display: none;">
+                                    <i class="fas fa-file-excel"></i>
+                                    <span id="templateFileName"></span>
+                                    <button type="button" class="remove-file" onclick="clearFile('template')">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <small><i class="fas fa-info-circle"></i> Upload the student upload template Excel file</small>
                     </div>
 
+                    <!-- Screenshot Images Upload -->
                     <div class="form-group">
-                        <label for="screenshots">
-                            <i class="fas fa-images"></i> Screenshot Images
+                        <label for="screenshots" class="form-label">
+                            <i class="fas fa-images"></i>
+                            <span>Screenshot Images</span>
                         </label>
-                        <input type="file" id="screenshots" name="screenshots" accept=".png,.jpg,.jpeg" multiple required>
-                        <small>Select one or more KCSE result screenshot images</small>
+                        <div class="file-upload-wrapper">
+                            <input type="file" id="screenshots" name="screenshots" accept=".png,.jpg,.jpeg" multiple required>
+                            <div class="file-upload-area" data-target="screenshots">
+                                <div class="file-upload-content">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p class="file-upload-text">Click to upload or drag and drop</p>
+                                    <p class="file-upload-hint">Image files (.png, .jpg, .jpeg) - Multiple files allowed</p>
+                                </div>
+                                <div class="files-selected" id="screenshotsSelected" style="display: none;">
+                                    <div class="files-list" id="screenshotsList"></div>
+                                    <button type="button" class="remove-file" onclick="clearFile('screenshots')">
+                                        <i class="fas fa-times"></i> Clear All
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <small><i class="fas fa-info-circle"></i> Select one or more KCSE result screenshot images</small>
                     </div>
 
                     <button type="submit" class="btn btn-primary" id="submitBtn">
-                        <i class="fas fa-upload"></i> Process Screenshots
+                        <span class="btn-content">
+                            <i class="fas fa-magic"></i>
+                            <span>Process Screenshots</span>
+                        </span>
+                        <span class="btn-loader" style="display: none;">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <span>Processing...</span>
+                        </span>
                     </button>
                 </form>
             </div>
 
+            <!-- Progress Section -->
             <div id="progressSection" class="progress-section" style="display: none;">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
+                <div class="progress-card">
+                    <div class="progress-header">
+                        <i class="fas fa-cog fa-spin"></i>
+                        <h3>Processing Your Files</h3>
+                    </div>
+                    <div class="progress-bar-wrapper">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                            <div class="progress-shine"></div>
+                        </div>
+                        <div class="progress-percentage" id="progressPercentage">0%</div>
+                    </div>
+                    <p id="progressText" class="progress-text">Initializing...</p>
                 </div>
-                <p id="progressText">Processing...</p>
             </div>
 
+            <!-- Result Section -->
             <div id="resultSection" class="result-section" style="display: none;">
                 <div class="result-card success" id="resultCard">
-                    <h3><i class="fas fa-check-circle"></i> Processing Complete!</h3>
-                    <div id="resultContent"></div>
+                    <div class="result-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3>Processing Complete!</h3>
+                    <div id="resultContent" class="result-content"></div>
                     <a id="downloadBtn" href="#" class="btn btn-success" style="display: none;">
-                        <i class="fas fa-download"></i> Download Results
+                        <i class="fas fa-download"></i>
+                        <span>Download Results</span>
                     </a>
                 </div>
             </div>
 
+            <!-- Error Section -->
             <div id="errorSection" class="result-section" style="display: none;">
                 <div class="result-card error" id="errorCard">
-                    <h3><i class="fas fa-exclamation-circle"></i> Error</h3>
-                    <div id="errorContent"></div>
+                    <div class="result-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3>Processing Error</h3>
+                    <div id="errorContent" class="result-content"></div>
                 </div>
             </div>
         </main>
 
         <footer>
-            <p>KCSE Enterprise System v1.0.0 | Built for efficient results processing</p>
+            <div class="footer-content">
+                <p><i class="fas fa-shield-alt"></i> KCSE Enterprise System v1.0.0</p>
+                <p class="footer-subtitle">Built for efficient and accurate results processing</p>
+            </div>
         </footer>
     </div>
 
